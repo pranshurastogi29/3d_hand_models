@@ -1,1 +1,1 @@
-# 3d_hand_models
+# 3d_hand_model_generator
