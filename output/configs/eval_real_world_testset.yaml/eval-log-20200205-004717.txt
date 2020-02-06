@@ -1,0 +1,31 @@
+2020-02-05 00:47:17,721 hand_shape_pose_inference INFO: EVAL:
+  DATASET: real_world_testset
+  PRINT_FREQ: 5
+  SAVE_BATCH_IMAGES_PRED: True
+  SAVE_DIR: ./output
+  SAVE_POSE_ESTIMATION: True
+GRAPH:
+  TEMPLATE_PATH: ./data/0214_lowP_vn_g.0001.obj
+MODEL:
+  BATCH_SIZE: 8
+  DEVICE: cpu
+  HOURGLASS:
+    NUM_FEAT_CHANNELS: 256
+    NUM_MODULES: 2
+    NUM_STAGES: 2
+  NUM_JOINTS: 21
+  NUM_WORKERS: 4
+  PRETRAIN_WEIGHT:
+    HM_NET_PATH: ./model/pretrained_models/net_hm.pth
+    MESH_NET_PATH: ./model/pretrained_models/net_feat_mesh.pth
+    POSE_NET_PATH: ./model/pretrained_models/net_mesh_pose.pth
+2020-02-05 00:47:17,746 hand_shape_pose_inference INFO: Load saved graph from ./output/configs/eval_real_world_testset.yaml/graph_dict.npy.
+2020-02-05 00:47:17,747 hand_shape_pose_inference INFO: Layer 0: M_0 = |V| = 1280 nodes, |E| = 2845 edges
+2020-02-05 00:47:17,747 hand_shape_pose_inference INFO: Layer 1: M_1 = |V| = 640 nodes, |E| = 1734 edges
+2020-02-05 00:47:17,747 hand_shape_pose_inference INFO: Layer 2: M_2 = |V| = 320 nodes, |E| = 932 edges
+2020-02-05 00:47:17,747 hand_shape_pose_inference INFO: Layer 3: M_3 = |V| = 160 nodes, |E| = 490 edges
+2020-02-05 00:47:17,747 hand_shape_pose_inference INFO: Layer 4: M_4 = |V| = 80 nodes, |E| = 267 edges
+2020-02-05 00:47:17,883 hand_shape_pose_inference INFO: lmax: [1.5350166960729208, 1.3921939856604162, 1.1495376588217834, 1.008215594788647]
+2020-02-05 00:47:18,255 hand_shape_pose_inference INFO: Evaluate on 583 frames:
+2020-02-05 00:47:21,322 hand_shape_pose_inference INFO: Evaluate: [8/583]	Average pose estimation error: 10.24 (mm)
+2020-02-05 00:47:21,322 hand_shape_pose_inference INFO: Saving image: ./output/configs/eval_real_world_testset.yaml/pred_0.jpg
