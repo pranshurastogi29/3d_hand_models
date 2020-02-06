@@ -1,27 +1,47 @@
-# Modern (OpenGL 3.3+) version similar to OpenDR
-This code is initially based on the work of Matt Loper's OpenDR: [https://github.com/mattloper/opendr/wiki].
-API has changed to adapt and add some functionality, so it's not fully compatible with the original OpenDR, please look at the demos in this repository to see how to run it. Note: some bugs have been noticed related to people trying OpenDR and chumpy using later versions of python, I'll look into this problem asap.
+## 3D Hand Shape and Pose Estimation from a Single RGB Image
+Open source of our CVPR 2019 paper "3D Hand Shape and Pose Estimation from a Single RGB Image"
 
-For my [projects](https://github.com/polmorenoc/inversegraphics), I've had to update the implementation with:
-- Updated to be used with Python 3.4+
-- Requirements: 
-    - GFLW 3.0+ software (http://www.glfw.org/) and python package (e.g. pip install glfw). 
-    - PyOpenGL python package.
-- Updated OpenDR to use OpenGL 3.3+ methods by using the modern pipepline (instead of the old fixed function pipeline). I also use shaders for rendering. This opens up the ability to use modern features (e.g. MSAA) and take more advantage of newer GPUs.
-- Two main modes are used, either MESA (OSMESA) or GLFW. The first allows the code to be easily run on headless servers, but is a software based implementation of OpenGL (i.e. runs on CPU). The second one allows running on GPUs without popping up an OpenGL window. In order for it to be fully headless (to run on most servers) you'd need to have NVIDIA GPUs with a [certain X configuration](http://www.nvidia.com/content/PDF/remote-viz-tesla-gpus.pdf) (see section on "SETTING UP THE X SERVER FOR HEADLESS OPERATION"). If you want to use MESA you might need to link to the Mesa libraries and set PYOPENGL_PLATFORM=osmesa environment variable.
-- The code I've implemented also allows as input lists of objects (meshes) so that one can render more complex scenes (e.g. using multiple objects and textures).
-- Current work in progress:
-    - Use modern OpenGL to implement analytic derivatives (see OpenDR's SQErrorRenderer class for an implementation of the squared error of an image and the OpenDR render).
-    - Get derivatives wrt Texture units working.
-- As for Chumpy: most of it is the same. Added some code for other optimization methods.
+![prediction example](teaser.png)
 
-Run "python setup.py install" on both chumpy and opendr subdirectories to install both packages.
+### Introduction
+This work is based on our [CVPR 2019 paper](https://docs.google.com/viewer?a=v&pid=sites&srcid=ZGVmYXVsdGRvbWFpbnxnZWxpdWhhb250dXxneDo3ZjE0ZjY3OWUzYjJkYjA2). You can also check our [project webpage](https://sites.google.com/site/geliuhaontu/home/cvpr2019) and [supplementary video](https://youtu.be/NActf7FcrmI) for a deeper introduction.
 
-Two short *demos* are available that show how to use OpenDR.
-- demo_fit_cube.py fits the scale of a cube to the appropriate size.
-- demo_fit_teapot.py uses a deformable teapot model and fits its PCA shape parameters to the ground truth. You'll need to create a data folder and add [teapotModel.pkl](https://drive.google.com/file/d/1JO5ZsXHb_KTsjFMFx7rxY0YVAwnM3TMY/view?usp=sharing) (click to download).
+This work addresses a novel and challenging problem of estimating the full 3D hand shape and pose from a single RGB image. Most current methods in 3D hand analysis from monocular RGB images only focus on estimating the 3D locations of hand keypoints, which cannot fully express the 3D shape of hand. In contrast, we propose a Graph Convolutional Neural Network (Graph CNN) based method to reconstruct a full 3D mesh of hand surface that contains richer information of both 3D hand shape and pose. To train networks with full supervision, we create a large-scale synthetic dataset containing both ground truth 3D meshes and 3D poses. When fine-tuning the networks on real-world datasets without 3D ground truth, we propose a weakly-supervised approach by leveraging the depth map as a weak supervision in training. Through extensive evaluations on our proposed new datasets and two public datasets, we show that our proposed method can produce accurate and reasonable 3D hand mesh, and can achieve superior 3D hand pose estimation accuracy when compared with state-of-the-art methods.
 
+### Citation
+If you find our work useful in your research, please consider citing:
 
+	@inproceedings{ge2019handshapepose,
+	  title={3D Hand Shape and Pose Estimation from a Single RGB Image},
+	  author={Ge, Liuhao and Ren, Zhou and Li, Yuncheng and Xue, Zehao and Wang, Yingying and Cai, Jianfei and Yuan, Junsong},
+	  booktitle={CVPR},
+	  year={2019}
+	}
 
+### Installation
+1. Install pytorch >= v0.4.0 following [official instruction](https://pytorch.org/).
+2. Clone this repo, and we'll call the directory that you cloned as ${HAND_ROOT}.
+3. Install dependencies:
+    ```
+    pip install -r requirements.txt
+    ```
 
-For a more complicated use-case see my [Overcoming Occlusion with Inverse Graphics project](https://github.com/polmorenoc/inversegraphics).
+### Pre-trained models
+~~Download pre-trained models from [online drive](https://mega.nz/#!yfZXBayC!izaLXi4X8LsgPuRWqKlUrCKBWNLVKTvfgAuFIS7SSFY), and unzip the file to ${HAND_ROOT}/model.~~
+
+### Running the code
+1. Evaluate on our real-world dataset and visualize the results of hand mesh and pose.
+    ```
+    python eval_script.py --config-file "configs/eval_real_world_testset.yaml"
+    ```
+   The visualization results will be saved to ${HAND_ROOT}/output/configs/eval_real_world_testset.yaml/
+
+2. Evaluate on STB dataset.
+
+    Download [STB dataset](https://www.dropbox.com/sh/ve1yoar9fwrusz0/AAAfu7Fo4NqUB7Dn9AiN8pCca?dl=0) to ${HAND_ROOT}/data/STB.
+    
+    Run the following script:
+    ```
+    python eval_script.py --config-file "configs/eval_STB_dataset.yaml"
+    ```
+   The pose estimation results will be saved to ${HAND_ROOT}/output/configs/eval_STB_dataset.yaml/pose_estimations.mat
