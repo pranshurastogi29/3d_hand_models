@@ -41,4 +41,4 @@ If you find the work useful in your research, please consider citing:
     python eval_script.py --config-file "configs/eval_STB_dataset.yaml"
     ```
    The pose estimation results will be saved to ${HAND_ROOT}/output/configs/eval_STB_dataset.yaml/pose_estimations.mat      
-   # this is not my work just made it compatible for python3
+### this is not my work just made it compatible for python3
