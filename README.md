@@ -30,4 +30,3 @@ This work addresses a novel and challenging problem of estimating the full 3D ha
     python eval_script.py --config-file "configs/eval_STB_dataset.yaml"
     ```
    The pose estimation results will be saved to ${HAND_ROOT}/output/configs/eval_STB_dataset.yaml/pose_estimations.mat      
-### this is not my work just made it compatible for python3
